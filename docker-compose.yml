@@ -1,0 +1,25 @@
+version: "3"
+services: 
+  project-2:
+    build: 
+      context: p2
+    volumes: 
+      - vol-project-2:/code/lib
+    command: ["npm", "run", "build"]
+  project-1:
+    build: 
+      context: p1
+    volumes: 
+      - vol-project-1:/code/lib
+    command: ["npm", "run", "build"]
+  nginx:
+    depends_on: 
+      - project-1
+      - project-2
+    image: nginx:latest
+    volumes:
+      - vol-project-1:/var/www/html/p1
+      - vol-project-2:/var/www/html/p2
+volumes: 
+  vol-project-1:
+  vol-project-2:
